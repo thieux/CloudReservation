@@ -38,8 +38,6 @@ public class TrainDataServer {
         trainDatasById.put("express_2000", trainData);
     }
 
-    ;
-
     @RequestMapping("data_for_train/{trainId}")
     public TrainDataDTO getTrainDataById(@PathVariable String trainId) {
         TrainDataDTO trainData = trainDatasById.get(trainId);
