@@ -1,19 +1,22 @@
-package com.fedou.kata.cloudreservation.trainreservation.traindata;
+package com.fedou.kata.cloudreservation.traindata;
 
 import java.util.Objects;
 
-public class SeatData {
+public class SeatDataDTO {
     // {"1A": {"booking_reference": "", "seat_number": "1", "coach": "A"}
     String bookingReference;
     int seatNumber;
     String coach;
 
-    public SeatData(){};
-    public SeatData(String bookingReference, String coach, int seatNumber) {
+    public SeatDataDTO(String bookingReference, String coach, int seatNumber) {
         this.bookingReference = bookingReference;
         this.seatNumber = seatNumber;
-        this.coach = coach;
+        this.coach = coach.toUpperCase();
     }
+
+    public SeatDataDTO() { // for Json parser needs
+    }
+
 
     public String getBookingReference() {
         return bookingReference;
@@ -40,7 +43,7 @@ public class SeatData {
     }
 
     public void setCoach(String coach) {
-        this.coach = coach;
+        this.coach = coach.toUpperCase();
     }
 
     @Override
@@ -57,9 +60,9 @@ public class SeatData {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SeatData seatData = (SeatData) o;
+        SeatDataDTO seatData = (SeatDataDTO) o;
         return seatNumber == seatData.seatNumber &&
-                Objects.equals(coach, seatData.coach);
+                coach.equalsIgnoreCase(seatData.coach);
     }
 
     @Override
