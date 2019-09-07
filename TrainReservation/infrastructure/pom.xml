@@ -48,23 +48,7 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>com.fedou.kata.cloudreservation.trainreservation.TrainReservationApplication</mainClass>
-                </configuration>
             </plugin>
         </plugins>
     </build>
-<!--
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <type>pom</type>
-                <version>${spring.version}</version>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
--->
 </project>
