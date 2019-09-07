@@ -48,6 +48,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <finalName>${project.parent.name}-${parent.version}</finalName>
+                </configuration>
             </plugin>
         </plugins>
     </build>

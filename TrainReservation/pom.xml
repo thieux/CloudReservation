@@ -6,7 +6,7 @@
 	<groupId>com.fedou.kata.cloudreservation</groupId>
 	<artifactId>TrainReservation</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>TrainReservation</name>
+	<name>trainreservation</name>
 	<description>Kata for cloud deployment</description>
 
 	<packaging>pom</packaging>
