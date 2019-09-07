@@ -31,7 +31,6 @@ public class TrainDataServer {
                                 coach,
                                 seatNumber));
             }
-            ;
         }
 
         trainData.seats = seatDatas.toArray(new SeatDataDTO[seatDatas.size()]);
