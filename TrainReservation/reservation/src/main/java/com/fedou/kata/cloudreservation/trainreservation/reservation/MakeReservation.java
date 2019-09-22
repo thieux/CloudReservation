@@ -28,11 +28,11 @@ public class MakeReservation {
         for (int i = 0; i < numberOfSeats; i++) {
             SeatData seat = seats.seats[i];
             bookedSeats.add(seat.getName());
-            trainDataService.reserve(
-                    trainId,
-                    bookedSeats,
-                    bookingReference);
         }
+        trainDataService.reserve(
+                trainId,
+                bookedSeats,
+                bookingReference);
         return new Reservation(trainId, bookingReference, bookedSeats);
     }
 }
