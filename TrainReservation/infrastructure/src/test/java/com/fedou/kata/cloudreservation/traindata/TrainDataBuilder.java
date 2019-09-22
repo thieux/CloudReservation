@@ -10,7 +10,7 @@ public class TrainDataBuilder {
     public static TrainData theAcceptanceTrain() {
         TrainData trainData = new TrainData();
         ArrayList<SeatData> seatDatas = new ArrayList<>();
-        for (String coach: new String[]{"A", "B"}) {
+        for (String coach : new String[]{"A", "B"}) {
             IntStream.range(1, 11).forEach(seatNumber -> {
                 seatDatas.add(
                         new SeatData(
@@ -20,8 +20,8 @@ public class TrainDataBuilder {
             });
         }
 
-        trainData.seats =  seatDatas.toArray(new SeatData[seatDatas.size()]);
+        trainData.seats = seatDatas.toArray(new SeatData[seatDatas.size()]);
         return trainData;
-    };
+    }
 
 }
