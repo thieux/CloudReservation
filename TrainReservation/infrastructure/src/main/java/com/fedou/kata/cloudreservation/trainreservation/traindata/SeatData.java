@@ -8,7 +8,9 @@ public class SeatData {
     int seatNumber;
     String coach;
 
-    public SeatData(){};
+    public SeatData() {
+    }
+
     public SeatData(String bookingReference, String coach, int seatNumber) {
         this.bookingReference = bookingReference;
         this.seatNumber = seatNumber;

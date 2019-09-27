@@ -1,6 +1,5 @@
 package com.fedou.kata.cloudreservation.trainreservation.traindata;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
