@@ -1,19 +1,22 @@
 package com.fedou.kata.cloudreservation.trainreservation.reservation;
 
 import com.fedou.kata.cloudreservation.trainreservation.bookingreference.BookingReferenceService;
-import com.fedou.kata.cloudreservation.trainreservation.traindata.SeatData;
-import com.fedou.kata.cloudreservation.trainreservation.traindata.TrainData;
+import com.fedou.kata.cloudreservation.trainreservation.traindata.Train;
 import com.fedou.kata.cloudreservation.trainreservation.traindata.TrainDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 @Service
 public class MakeReservation {
     private TrainDataService trainDataService;
     private BookingReferenceService bookingReferenceService;
+    private final Reservation failed_reservation = new Reservation(null, null, emptyList());
 
     @Autowired
     public MakeReservation(TrainDataService trainDataService, BookingReferenceService bookingReferenceService) {
@@ -22,17 +25,14 @@ public class MakeReservation {
     }
 
     public Reservation book(String trainId, int numberOfSeats) {
-        TrainData seats = trainDataService.getTrainData(trainId);
-        String bookingReference = bookingReferenceService.getUniqueBookingReference();
-        List<String> bookedSeats = new ArrayList<>(numberOfSeats);
-        for (int i = 0; i < numberOfSeats; i++) {
-            SeatData seat = seats.seats[i];
-            bookedSeats.add(seat.getName());
+        if (numberOfSeats<=0) {
+            return failed_reservation;
         }
-        trainDataService.reserve(
-                trainId,
-                bookedSeats,
-                bookingReference);
-        return new Reservation(trainId, bookingReference, bookedSeats);
+        Train train = trainDataService.getTrainById(trainId);
+        List<String> seatIds = train.findSeatsForBooking(numberOfSeats);
+
+        String reference = bookingReferenceService.getUniqueBookingReference();
+        trainDataService.reserve(trainId, reference, seatIds);
+        return new Reservation(trainId, reference, seatIds);
     }
 }

@@ -6,7 +6,8 @@ import java.util.List;
 
 @Repository
 public interface TrainDataService {
-    TrainData getTrainData(String trainId);
 
-    void reserve(String trainId, List<String> seats, String bookingReference);
+    void reserve(String trainId, String bookingReference, List<String> seats);
+
+    Train getTrainById(String trainId);
 }

@@ -30,18 +30,23 @@ public class TrainDataRemote implements TrainDataService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    @Override
-    public TrainData getTrainData(String trainId) {
+    private TrainData getTrainData(String trainId) {
         return restTemplate.getForObject(trainDataHost + "/" + trainDataEndPoint + "/" + trainId, TrainData.class);
     }
 
     @Override
-    public void reserve(String trainId, List<String> seats, String bookingReference) {
+    public void reserve(String trainId, String bookingReference, List<String> seats) {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("trainId", trainId);
         map.add("seats", seats);
         map.add("bookingId", bookingReference);
         restTemplate.postForLocation(trainDataHost + "/" + trainDataBookingEndPoint, map);
 //                new TrainReservationDTO(trainId, seats, bookingReference));
+    }
+
+    @Override
+    public Train getTrainById(String trainId) {
+        TrainData trainData = getTrainData(trainId);
+        return new TrainBuilder(trainId).with(trainData).build();
     }
 }
