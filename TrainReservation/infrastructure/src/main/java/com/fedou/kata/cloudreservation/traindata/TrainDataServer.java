@@ -5,9 +5,7 @@ import com.fedou.kata.cloudreservation.trainreservation.traindata.TrainData;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.stream.events.Characters;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
@@ -38,12 +36,13 @@ public class TrainDataServer {
 
         trainData.seats = (SeatData[]) seatDatas.toArray();
         trainDatasById.put("express_2000", trainData);
-    };
+    }
 
     @RequestMapping("data_for_train/{trainId}")
     public TrainData getTrainDataById(@RequestParam String trainId) {
         return trainDatasById.get(trainId);
-    };
+    }
+
     @RequestMapping(method = RequestMethod.POST, path="/reserve")
     public void reserve(
             @RequestBody String trainId,
