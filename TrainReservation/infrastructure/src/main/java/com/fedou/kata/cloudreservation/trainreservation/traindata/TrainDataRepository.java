@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @Primary
-public class TrainDataRemote implements TrainDataService {
+public class TrainDataRepository implements TrainDataService {
     private RestTemplate restTemplate;
 
     @Value("${trainDataHost}")
@@ -26,7 +26,7 @@ public class TrainDataRemote implements TrainDataService {
     private String trainDataBookingEndPoint;
 
     @Autowired
-    public TrainDataRemote(RestTemplateBuilder restTemplateBuilder) {
+    public TrainDataRepository(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

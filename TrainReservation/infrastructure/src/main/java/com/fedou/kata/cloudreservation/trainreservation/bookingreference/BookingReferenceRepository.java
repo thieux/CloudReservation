@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Repository
 @Primary
-public class BookingReferenceRemote implements BookingReferenceService {
+public class BookingReferenceRepository implements BookingReferenceService {
 
     private RestTemplate restTemplate;
 
@@ -17,7 +17,7 @@ public class BookingReferenceRemote implements BookingReferenceService {
     private String bookingReferenceUrl;
 
     @Autowired
-    public BookingReferenceRemote(RestTemplateBuilder restTemplateBuilder) {
+    public BookingReferenceRepository(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 

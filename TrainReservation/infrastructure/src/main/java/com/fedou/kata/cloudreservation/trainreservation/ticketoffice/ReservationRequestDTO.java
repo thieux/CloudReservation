@@ -1,4 +1,4 @@
-package com.fedou.kata.cloudreservation.trainreservation.rest;
+package com.fedou.kata.cloudreservation.trainreservation.ticketoffice;
 
 import java.util.Objects;
 

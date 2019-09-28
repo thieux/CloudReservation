@@ -75,7 +75,7 @@ class MakeReservationTest {
         assertAll(
                 () -> verify(trainDataService, VerificationModeFactory.times(0)).reserve(anyString(), anyString(), anyList()),
                 () -> assertThat(reservation)
-                        .isEqualToIgnoringNullFields(new Reservation(trainId, null, null)),
+                        .isEqualToIgnoringNullFields(new Reservation(trainId, "", null)),
                 () -> assertThat(reservation.getSeats()).isEmpty()
         );
     }

@@ -1,4 +1,4 @@
-package com.fedou.kata.cloudreservation.trainreservation.rest;
+package com.fedou.kata.cloudreservation.trainreservation.ticketoffice;
 
 import com.fedou.kata.cloudreservation.trainreservation.reservation.MakeReservation;
 import com.fedou.kata.cloudreservation.trainreservation.reservation.Reservation;

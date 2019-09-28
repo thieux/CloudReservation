@@ -23,12 +23,14 @@ public class MakeReservation {
     }
 
     public Reservation book(String trainId, int numberOfSeats) {
-        if (numberOfSeats<=0) {
+        if (numberOfSeats <= 0) {
             return failed_reservation;
         }
         Train train = trainDataService.getTrainById(trainId);
         List<String> seatIds = train.findSeatsForBooking(numberOfSeats);
-
+        if (seatIds.isEmpty()) {
+            return new Reservation(trainId, "", seatIds);
+        }
         String reference = bookingReferenceService.getUniqueBookingReference();
         trainDataService.reserve(trainId, reference, seatIds);
         return new Reservation(trainId, reference, seatIds);
