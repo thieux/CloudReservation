@@ -2,7 +2,9 @@ package com.fedou.kata.cloudreservation.trainreservation.ticketoffice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fedou.kata.cloudreservation.trainreservation.TrainReservationApplicationTests;
+import com.fedou.kata.cloudreservation.trainreservation.traindata.SeatData;
 import com.fedou.kata.cloudreservation.trainreservation.traindata.TrainData;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.http.MediaType;
@@ -15,7 +17,9 @@ import java.util.List;
 import static com.fedou.kata.cloudreservation.traindata.TrainDataBuilder.theAcceptanceTrain;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,11 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TicketOfficeControllerTest extends TrainReservationApplicationTests {
 
     @Test
-    public void makeReservation() throws Exception {
+    public void make_a_simple_reservation() throws Exception {
         String trainId = "express_2000";
         TrainData trainData = theAcceptanceTrain();
         String bookingId = "something";
-        List<String> bookedSeats = asList("1A","2A");
+        List<String> bookedSeats = asList("1A", "2A");
 
         givenTheTrainDataServerWillProvide(trainId, trainData);
         givenTheBookingReferenceServerWillProvide(bookingId);
@@ -40,10 +44,45 @@ class TicketOfficeControllerTest extends TrainReservationApplicationTests {
                 trainId,
                 bookingId,
                 bookedSeats);
+        assertAll(
+                () -> thenTheTrainDataServerReceives(expectedReservation),
+                () -> assertThat(actualReservation)
+                        .isEqualToComparingFieldByField(expectedReservation)
+        );
+    }
 
-        thenTheTrainDataServerReceives(expectedReservation);
-        assertThat(actualReservation)
-                .isEqualToComparingFieldByField(expectedReservation);
+    @Test
+    public void no_seats_found() throws Exception {
+        String trainId = "express_2000";
+        TrainData trainData = new TrainData();
+        trainData.seats = new SeatData[]{
+                new SeatData("booked", "A", 1),
+                new SeatData("booked", "A", 2),
+                new SeatData("booked", "A", 3)
+        };
+        String bookingId = "something";
+        List<String> bookedSeats = emptyList();
+
+        givenTheTrainDataServerWillProvide(trainId, trainData);
+        ReservationRequestDTO bookingRequest = new ReservationRequestDTO(trainId, 1);
+        givenTheTrainDataServerWillBeCalledForAReservation();
+
+        ReservationDTO actualReservation = whenMakeReservationFor(bookingRequest);
+
+        ReservationDTO expectedReservation = new ReservationDTO(
+                trainId,
+                "",
+                bookedSeats);
+        assertAll(
+                this::thentheTrainDataServerDoNotReceivesReservation,
+                () -> assertThat(actualReservation)
+                        .isEqualToComparingFieldByField(expectedReservation)
+        );
+    }
+
+    @BeforeEach
+    public void resetMocks() {
+        reset();
     }
 
     private void givenTheBookingReferenceServerWillProvide(String bookingId) {
@@ -85,4 +124,7 @@ class TicketOfficeControllerTest extends TrainReservationApplicationTests {
                         .withBody(containing(reservation.getBooking_reference())).build()));
     }
 
+    private void thentheTrainDataServerDoNotReceivesReservation() {
+        verify(0, postRequestedFor(urlEqualTo("/reserve")));
+    }
 }
