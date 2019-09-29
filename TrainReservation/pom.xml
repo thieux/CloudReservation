@@ -17,7 +17,8 @@
 	</modules>
 
 	<properties>
-		<spring.version>2.2.0.M5</spring.version>
+		<spring.version>2.2.0.M6</spring.version>
+		<!--	last release is still using JUnit 4.12	<spring.version>2.1.7.RELEASE</spring.version>-->
 		<java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -27,12 +28,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
+			<version>${spring.version}</version>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
@@ -58,6 +61,15 @@
 		</pluginRepository>
 	</pluginRepositories>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+		</plugins>
+	</build>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

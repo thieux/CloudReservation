@@ -12,18 +12,19 @@
 
     <groupId>com.fedou.kata.cloudreservation</groupId>
     <artifactId>infrastructure</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${parent.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.fedou.kata.cloudreservation</groupId>
             <artifactId>reservation</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -47,6 +48,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.version}</version>
                 <executions>
                     <execution>
                         <goals>
