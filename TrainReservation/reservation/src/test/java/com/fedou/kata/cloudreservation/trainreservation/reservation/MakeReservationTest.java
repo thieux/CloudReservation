@@ -4,6 +4,8 @@ import com.fedou.kata.cloudreservation.trainreservation.bookingreference.Booking
 import com.fedou.kata.cloudreservation.trainreservation.traindata.Coach;
 import com.fedou.kata.cloudreservation.trainreservation.traindata.Train;
 import com.fedou.kata.cloudreservation.trainreservation.traindata.TrainDataService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -101,5 +103,49 @@ class MakeReservationTest {
         );
     }
 
+    @Nested
+    class Under70PercentBookingOnTrain {
+        String trainId = "trainId";
+        String bookingReference = "resa";
+
+        @BeforeEach
+        void setupSharedContext() {
+            doReturn(new Train(trainId, asList(
+                    new Coach("A", 5, emptyList()),
+                    new Coach("B", 5, asList(2, 3, 4, 5))
+            ))).when(trainDataService).getTrainById(trainId);
+        }
+
+        @Test
+        void should_book_when_keeps_under_70_percent() {
+            doReturn(bookingReference)
+                    .when(bookingReferenceService).getUniqueBookingReference();
+
+            Reservation reservation = service.book(trainId, 1);
+
+            String[] bookedSeats = {"2B"};
+            assertAll(
+                    () -> verify(trainDataService).reserve(trainId, bookingReference, asList(bookedSeats)),
+                    () -> assertThat(reservation)
+                            .isEqualToIgnoringNullFields(new Reservation(trainId, bookingReference, null)),
+                    () -> assertThat(reservation.getSeats())
+                            .containsExactlyInAnyOrder(bookedSeats)
+            );
+        }
+
+        @Test
+        void should_not_book_when_goes_over_70_percent() {
+
+            Reservation reservation = service.book(trainId, 2);
+
+            assertAll(
+                    () -> verify(trainDataService, times(0)).reserve(anyString(), anyString(), anyList()),
+                    () -> verify(bookingReferenceService, times(0)).getUniqueBookingReference(),
+                    () -> assertThat(reservation)
+                            .isEqualToComparingFieldByField(new Reservation(trainId, "", emptyList()))
+            );
+        }
+
+    }
 
 }
