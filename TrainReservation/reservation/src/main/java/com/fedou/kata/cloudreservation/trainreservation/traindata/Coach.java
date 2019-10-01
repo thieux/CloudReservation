@@ -4,13 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.fedou.kata.cloudreservation.trainreservation.traindata.RatioCalculation.isUnder70PercentWhenBookingOf;
+import static com.fedou.kata.cloudreservation.trainreservation.traindata.RatioCalculation.keepsUnder70PercentAfterBookingWith;
 import static java.util.Collections.emptyList;
 
 public class Coach {
     private final String coachId;
     private final int totalSeats;
     private final List<Integer> freeSeats;
+    static final BookingOption emptyOption = new BookingOption(emptyList(), false);
 
     // @see this(String coachId, int totalSeats, List<Integer> freeSeats)
     @Deprecated
@@ -24,22 +25,35 @@ public class Coach {
         this.freeSeats = new LinkedList<>(freeSeats);
     }
 
-    List<String> findIdealSeatsForBooking(int numberOfSeats) {
-        return findSeatsForBookingWith70PercentRule(numberOfSeats, true);
-    }
-
-    List<String> findSeatsForBooking(int numberOfSeats) {
-        return findSeatsForBookingWith70PercentRule(numberOfSeats, false);
-    }
-
-    private List<String> findSeatsForBookingWith70PercentRule(int numberOfSeats, boolean idealBooking) {
-        if (freeSeats.size() >= numberOfSeats) {
-            if (!idealBooking || isUnder70PercentWhenBookingOf(totalSeats, freeSeats.size(), numberOfSeats)) {
-                return freeSeats.subList(0, numberOfSeats)
-                        .stream().map((item) -> item + coachId).collect(Collectors.toList());
-            }
+    BookingOption findSeatsForBooking(int numberOfSeats) {
+        if (bookingFitsInCoach(numberOfSeats)) {
+            return new BookingOption(
+                    collectSeatsForBooking(numberOfSeats),
+                    keepsUnder70PercentAfterBookingWith(totalSeats, freeSeats.size(), numberOfSeats));
         }
-        return emptyList();
+        return emptyOption;
+    }
+
+    static class BookingOption {
+        final List<String> seats;
+        final boolean respectFreeSeatsRatio;
+        BookingOption (List<String> seats, boolean respectFreeSeatsRatio) {
+            this.seats = seats;
+            this.respectFreeSeatsRatio = respectFreeSeatsRatio;
+        }
+
+        boolean seatsFound() {
+            return !seats.isEmpty();
+        }
+    }
+
+    private List<String> collectSeatsForBooking(int numberOfSeats) {
+        return freeSeats.subList(0, numberOfSeats)
+                .stream().map((item) -> item + coachId).collect(Collectors.toList());
+    }
+
+    private boolean bookingFitsInCoach(int numberOfSeats) {
+        return freeSeats.size() >= numberOfSeats;
     }
 
     public int getTotalSeats() {
