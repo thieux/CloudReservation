@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.fedou.kata.cloudreservation.trainreservation.traindata.RatioCalculation.keepsUnder70PercentAfterBookingWith;
+import static com.fedou.kata.cloudreservation.trainreservation.traindata.RatioCalculation.isUnder70PercentWhenBookingOf;
 import static java.util.Collections.emptyList;
 
 public class Train {
@@ -26,27 +26,29 @@ public class Train {
     }
 
     public List<String> findSeatsForBooking(int numberOfSeats) {
-        Coach.BookingOption result = Coach.emptyOption;
-        if (keepsUnder70PercentAfterBookingWith(totalSeats, totalFreeSeats, numberOfSeats)) {
-            for (Coach current : coaches) {
-                Coach.BookingOption option = current.findSeatsForBooking(numberOfSeats);
-                if (option.seatsFound()) {
-                    if (option.respectFreeSeatsRatio) {
-                        result = option;
-                        break;
-                    } else {
-                        if (result == Coach.emptyOption) {
-                            result = option;
-                        }
-                    }
-                }
+        List<String> result = emptyList();
+
+        if (isUnder70PercentWhenBookingOf(totalSeats, totalFreeSeats, numberOfSeats)) {
+            result = findSeatsForBooking(numberOfSeats, true);
+            if (result.isEmpty()) {
+                result = findSeatsForBooking(numberOfSeats, false);
             }
         }
         logResult(numberOfSeats, result);
-        return result.seats;
+        return result;
     }
 
-    private void logResult(int numberOfSeats, Coach.BookingOption seats) {
+    private List<String> findSeatsForBooking(int numberOfSeats, boolean respectFreeSeatsRatioPerCoach) {
+        for (Coach current : coaches) {
+            List<String> seats = current.findSeatsForBooking(numberOfSeats, respectFreeSeatsRatioPerCoach);
+            if (!seats.isEmpty()) {
+                return seats;
+            }
+        }
+        return emptyList();
+    }
+
+    private void logResult(int numberOfSeats, List<String> seats) {
         log.debug("Booking {} seats for train {} gives {}.", numberOfSeats, this, seats);
     }
 

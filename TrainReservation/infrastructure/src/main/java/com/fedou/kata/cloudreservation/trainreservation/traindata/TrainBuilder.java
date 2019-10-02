@@ -34,7 +34,7 @@ public class TrainBuilder {
     public Train build() {
         ArrayList<Coach> coaches = new ArrayList<>();
         this.coachesBuilder.forEach(
-                (key, value) -> coaches.add(new Coach(key, value)));
+                (key, value) -> coaches.add(new Coach(key, value.size(), value)));
         return new Train(trainId, coaches);
     }
 }
