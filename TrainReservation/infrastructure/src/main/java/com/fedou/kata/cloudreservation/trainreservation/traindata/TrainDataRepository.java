@@ -41,7 +41,6 @@ public class TrainDataRepository implements TrainDataService {
         map.add("seats", seats);
         map.add("bookingId", bookingReference);
         restTemplate.postForLocation(trainDataHost + "/" + trainDataBookingEndPoint, map);
-//                new TrainReservationDTO(trainId, seats, bookingReference));
     }
 
     @Override

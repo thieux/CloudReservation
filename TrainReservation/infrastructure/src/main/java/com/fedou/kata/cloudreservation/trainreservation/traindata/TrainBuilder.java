@@ -2,6 +2,8 @@ package com.fedou.kata.cloudreservation.trainreservation.traindata;
 
 import java.util.*;
 
+import static java.util.Arrays.stream;
+
 public class TrainBuilder {
     private Map<String, List<Integer>> coachesBuilder = new HashMap<>();
     private String trainId;
@@ -11,9 +13,7 @@ public class TrainBuilder {
     }
 
     public TrainBuilder with(TrainData trainData) {
-        for (int i = 0; i < trainData.seats.length; i++) {
-            this.with(trainData.seats[i]);
-        }
+        stream(trainData.seats).forEach(this::with);
         return this;
     }
 
@@ -21,8 +21,6 @@ public class TrainBuilder {
         if(seat.bookingReference == null) {
             addFreeSeat(seat.coach, seat.seatNumber);
         }
-        // count all seat for 70%
-        // without else : coachSeatBuilder.put(coach, coachSeatBuilder.getOrDefault(coach, 0)+1)
         return this;
     }
 

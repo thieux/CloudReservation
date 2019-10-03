@@ -24,6 +24,5 @@ public class TicketOfficeController {
     public ReservationDTO makeReservation(@RequestBody ReservationRequestDTO req) {
         Reservation booking = makeReservation.book(req.getTrainId(), req.getNumberOfSeats());
         return ReservationDTO.toDTO(booking);
-        //return new ReservationDTO(null, null, null);
     }
 }
