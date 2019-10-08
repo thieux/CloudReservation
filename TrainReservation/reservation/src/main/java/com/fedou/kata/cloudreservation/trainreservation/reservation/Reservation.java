@@ -38,7 +38,6 @@ public class Reservation {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(trainId, bookingReference, seats);
     }
 }

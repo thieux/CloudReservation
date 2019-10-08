@@ -40,12 +40,9 @@ public class TrainDataServer {
     @RequestMapping("data_for_train/{trainId}")
     public TrainDataDTO getTrainDataById(@PathVariable String trainId) {
         TrainDataDTO trainData = trainDatasById.get(trainId);
-        System.out.println("trainId = " + trainId);
-        System.out.println("trainData = " + trainData);
+        // TODO: use logger
         return trainData;
     }
-
-    ;
 
     @RequestMapping(method = RequestMethod.POST, path = "/reserve", consumes = "application/json")
     public void reserve(@RequestBody Map<String, Object> arguments) {
