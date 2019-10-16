@@ -10,9 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.fedou.kata.cloudreservation</groupId>
     <artifactId>infrastructure</artifactId>
-    <version>${project.parent.version}</version>
     <packaging>jar</packaging>
 
     <properties>
